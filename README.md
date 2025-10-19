@@ -85,87 +85,16 @@ A fully local, privacy-first AI voice assistant for Windows that gives you compl
 
 ## Installation
 
-### 1. Prerequisites
+**👉 [Go to SETUP.md](SETUP.md) for exact copy-paste commands with placeholders.**
 
-```powershell
-# Install Ollama from https://ollama.ai
-# Download and install from the website
-
-# Install Python 3.10+
-# Download from https://www.python.org/
-
-# Clone this repository
-git clone https://github.com/yourusername/AI-Windows_Assistant.git
-cd AI-Windows_Assistant
-```
-
-### 2. Create Conda Environment (Optional but Recommended)
-
-```powershell
-# For DirectML/Windows native GPU support:
-conda create -n windows-ai python=3.10
-conda activate windows-ai
-
-# Or use DirectML-optimized environment:
-conda create -n windows-ai-directml python=3.10
-conda activate windows-ai-directml
-```
-
-### 3. Install Dependencies
-
-```powershell
-pip install -r requirements.txt
-```
-
-### 4. Configure Ollama
-
-```powershell
-# Run the setup script
-.\setup_ollama.ps1
-
-# Or manually:
-# 1. Download and install Ollama from https://ollama.ai
-# 2. Pull a model: ollama pull llama3.2:3b
-# 3. Start Ollama service (it runs in the background)
-```
-
-### 5. Configure the Assistant
-
-Create a `.env` file in the project root from `.env.example`:
-
-```env
-# Ollama Configuration
-OLLAMA_HOST=127.0.0.1
-OLLAMA_PORT=11434
-OLLAMA_MODEL=llama3.2:3b
-
-# Speech Recognition
-WAKE_WORD=wolf-logic                    # Change this to your own wake word
-USE_WHISPER=false
-WHISPER_MODEL=base
-
-# Text-to-Speech
-TTS_RATE=200
-
-# Security - Confirmation Keyword
-CONFIRMATION_KEYWORD=wolf-logic         # Change this to your own keyword
-
-# System Control
-ALLOW_SYSTEM_CONTROL=true
-
-# Logging
-LOG_LEVEL=INFO
-```
-
-**Important**: The `.env.example` file has `WAKE_WORD` and `CONFIRMATION_KEYWORD` defaulted to `"wolf-logic"`. **Please customize these to your own values** when setting up your instance.
-ALLOW_SYSTEM_CONTROL=true
-
-# Logging
-LOG_LEVEL=INFO
-
-# Security - Confirmation keyword for all system changes
-CONFIRMATION_KEYWORD=wolf-logic
-```
+Quick summary:
+1. Install Ollama + Python 3.10+
+2. Clone repo
+3. Copy `.env.example` → `.env` and customize
+4. Run `pip install -r requirements.txt`
+5. Run `ollama serve` (one terminal)
+6. Run `python main.py` (another terminal)
+7. Say your wake word to activate
 
 ## Usage
 
