@@ -1,0 +1,21 @@
+[Unit]
+Description=Whisper Speech-to-Text Server (WSL)
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=<YOUR_WSL_USERNAME>
+WorkingDirectory=/home/<YOUR_WSL_USERNAME>/Window-Dev_Gallery-Ai-Assistant
+Environment="PATH=/home/<YOUR_WSL_USERNAME>/miniconda3/envs/whisper-server/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ExecStart=/home/<YOUR_WSL_USERNAME>/miniconda3/envs/whisper-server/bin/python docker/whisper/whisper_server.py
+Restart=on-failure
+RestartSec=10
+
+# Log output
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=whisper-server
+
+[Install]
+WantedBy=multi-user.target
