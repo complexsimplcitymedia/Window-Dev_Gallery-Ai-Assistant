@@ -16,6 +16,15 @@ This guide sets up OpenAI Whisper as a FastAPI server running natively in WSL2 w
 - Ubuntu 22.04 or later in WSL
 - GPU (optional, CPU works but slower)
 
+## Port Configuration
+
+**Default:** Port 5000 (used in this setup because port 8000 was already in use)
+
+**Customize:** Users can change the port to any available port (8000, 9000, etc.) by:
+1. Editing `docker/whisper/whisper_server.py` line that starts the server
+2. Or setting environment variable: `export WHISPER_PORT=<your-port>`
+3. Update `.env` file with: `WHISPER_SERVER_URL=http://localhost:<your-port>`
+
 ## Quick Setup (5 minutes)
 
 ### Step 1: Copy Setup Script to WSL
@@ -92,8 +101,10 @@ Create `.env` file in WSL project root:
 export WHISPER_MODEL=base        # tiny, base, small, medium, large
 export WHISPER_DEVICE=cpu        # cpu, cuda, rocm (AMD GPU)
 export WHISPER_LANGUAGE=en       # Language code
-export WHISPER_PORT=5000         # Listen port
+export WHISPER_PORT=5000         # Listen port (customize to your available port)
 ```
+
+**Note:** This implementation uses port 5000 by default. If that port is already in use on your system, change `WHISPER_PORT` to another available port (e.g., 8000, 9000, etc.) and update `.env` accordingly.
 
 ### Enable GPU Acceleration (AMD)
 
