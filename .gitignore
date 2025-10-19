@@ -1,0 +1,136 @@
+# Environment Variables & Secrets
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.pfx
+
+# API Keys & Credentials
+config/api_keys.json
+config/credentials.json
+config/secrets.json
+mem0_api_key
+ollama_api_key
+openai_api_key
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+venv/
+ENV/
+env/
+.venv
+venv.bak/
+env.bak/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.kate-swp
+*.sublime-project
+*.sublime-workspace
+
+# Project-specific
+logs/
+*.log
+models/
+audio_temp/
+audio_cache/
+*.wav
+*.mp3
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Local development
+.local/
+local_config/
+test_output/
+
+# Git-related
+.git/
+.gitattributes
+
+# Build artifacts
+*.o
+*.a
+*.so
+*.dylib
+*.exe
+*.out
+
+# Database files (if any)
+*.db
+*.sqlite
+*.sqlite3
+
+# Node modules (if using any node-based tools)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Memory/Cache
+.cache/
+*.cache
+
+# Custom configurations with sensitive data
+config/*.yml
+config/*.yaml
+!config/*.example.yml
+!config/*.example.yaml
+
+# Tailscale & Network configuration
+tailscale_config.json
+network_config.json
+
+# Windows specific
+*.lnk
+$RECYCLE.BIN/
+
+# Caddy reverse proxy cache
+caddy_cache/
+.caddy/

@@ -1,0 +1,38 @@
+version: '3.8'
+
+# IMPORTANT: Ollama runs NATIVELY on Windows, NOT in Docker
+# This docker-compose is for OPTIONAL Whisper server only
+# The Python app can run in WSL2/Docker and will connect to:
+# - Ollama running on Windows (http://host.docker.internal:11434)
+# - Whisper server in this container (http://whisper-server:8080)
+
+services:
+  # Local Whisper server for speech-to-text (Optional)
+  # Runs in WSL2 Docker, connects to Windows Ollama via host.docker.internal
+  whisper-server:
+    build:
+      context: ./docker/whisper
+      dockerfile: Dockerfile
+    container_name: ai-assistant-whisper
+    ports:
+      - "8080:8080"
+    environment:
+      - MODEL_SIZE=base
+      - DEVICE=cpu
+      - HOST=0.0.0.0
+      - PORT=8080
+      - LANGUAGE=en
+    volumes:
+      - ./models:/app/models
+      - ./audio_temp:/app/audio_temp
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+volumes:
+  whisper_models:
+    driver: local

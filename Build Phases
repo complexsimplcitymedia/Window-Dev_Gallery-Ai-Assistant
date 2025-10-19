@@ -1,0 +1,243 @@
+How to make a custom AI assistant on Windows using AI Dev Gallery that can inherently control your device by giving voice commands
+Building a custom voice assistant with device control capabilities on Windows using the AI Dev Gallery requires a combination of its features with custom code. The AI Dev Gallery is not a no-code tool for creating assistants, but an open-source application that provides interactive samples and models for developers to integrate AI features into their own projects.
+The overall process involves these key steps:
+Use the AI Dev Gallery to obtain a base AI model and reference code.
+Develop the voice-to-text (STT) and text-to-speech (TTS) components of the assistant.
+Write the custom C# or Python code to interpret the user's intent and execute device control functions.
+Step 1: Set up local AI infrastructure with Ollama and DirectML acceleration
+First, you will need to set up your development environment with completely local AI models and GPU acceleration.
+Install prerequisites: Ensure you have Windows 10 (version 10.0.17763.0 or later), Visual Studio 2022, and the "Windows application development" workload.
+Install DirectML: Enable DirectML support for GPU acceleration on Windows (works with AMD, Intel, and NVIDIA GPUs).
+Install Ollama: Download and install Ollama for Windows to run local AI models without any cloud dependencies.
+Configure Ollama with DirectML: Set up Ollama to utilize DirectML for hardware acceleration of model inference.
+Download local models: Use Ollama to pull models like llama3.2, phi3, mistral, or codellama - all running entirely on your local machine with GPU acceleration.
+Test model interaction: Verify your models work by running simple queries through Ollama's REST API (http://localhost:11434).
+Set up API integration: Create a C# project that communicates with your local Ollama server for all AI processing.
+Step 2: Add voice capabilities (STT and TTS)
+The core AI model from the gallery is text-based. You will need to integrate voice-to-text and text-to-speech services to enable verbal communication.
+Text-to-speech (TTS): The C# project from the gallery can be easily extended to include TTS functionality. The System.Speech library in .NET is a common choice for this.
+Initialize a SpeechSynthesizer object.
+Call its .SpeakAsync() method to make the assistant respond with spoken words.
+Voice-to-text (STT): Use completely local speech recognition with no cloud dependencies.
+Option A: Local Whisper Server. Set up Whisper model running locally for high-accuracy offline speech recognition. This can be done using whisper.cpp or by running Whisper via Python locally - completely offline.
+Option B: Windows Native Speech Recognition. Use the built-in Windows Speech Recognition API through System.Speech.Recognition in C# for native integration without any external dependencies.
+Both options are 100% local and require no internet connection or cloud services.
+Create a wake word listener: The easiest way to get started is to use a simple keyword.
+In your code, continuously listen for a wake word like "Assistant" or "Computer."
+Once detected, the app should then activate the full speech recognition to listen for the command.
+
+Detailed Setup for Speech Recognition Options:
+
+Local Whisper Server Setup with DirectML:
+1. Install whisper.cpp with DirectML support or use Python's whisper library with DirectML backend
+2. Download pre-trained Whisper models locally (base, small, medium, large)
+3. Configure Whisper to use DirectML for GPU-accelerated speech recognition
+4. Run Whisper as a local HTTP server that your C# app can call
+5. Benefits: High accuracy, completely offline, supports multiple languages, no cloud dependency, GPU acceleration
+6. Example integration: Send audio chunks to localhost:8080/transcribe with faster processing times
+
+Ollama Integration Setup with DirectML:
+1. Install Ollama and pull your preferred model (e.g., ollama pull llama3.2)
+2. Configure Ollama to use DirectML backend for GPU acceleration
+3. Start Ollama service with DirectML enabled (runs on localhost:11434 by default)
+4. Create HTTP client in C# to communicate with Ollama API
+5. Send user queries to local Ollama endpoint for AI responses
+6. Benefits: Complete privacy, no data leaves your machine, customizable models, GPU-accelerated inference
+
+DirectML Configuration:
+1. Ensure DirectML runtime is installed (included in Windows 10 version 1903+)
+2. Set environment variables for Ollama to use DirectML backend
+3. Verify GPU acceleration is working through Ollama logs
+4. Benefits: Faster inference, lower CPU usage, works across all GPU vendors (AMD, Intel, NVIDIA)
+
+Windows Native Speech Recognition Setup:
+1. Enable Windows Speech Recognition in system settings
+2. Use System.Speech.Recognition.SpeechRecognitionEngine in C#
+3. Create grammar rules for better accuracy with specific commands
+4. Benefits: No additional setup, native integration, lightweight
+5. Limitations: Less accurate than Whisper, requires training for better results
+Step 3: Implement device control
+The final step is to create the logic that translates the AI's response into actions that control your computer.
+Interpret intent: The AI model's text output will be a natural language response. You need to write custom code to parse this text and determine the user's intent. For example, the AI's response to "open the calculator" might be "Opening the calculator for you." Your code needs to recognize the phrase "Opening the calculator" and translate it into a system command.
+Execute commands: Use your programming language's standard libraries to control the computer based on the interpreted intent.
+For C#: Use the System.Diagnostics.Process class to start applications. For example, Process.Start("calc.exe") would open the calculator.
+For Python: Use the subprocess module to run system commands, such as subprocess.run(["calc.exe"]).
+Map commands and AI responses: You will need to build a system that maps certain phrases from your AI to specific system commands.
+Example mapping:
+AI phrase: "Opening the calculator."
+System command: Process.Start("calc.exe")
+AI phrase: "Searching for..."
+System command: Open a web browser to perform a search.
+Important considerations
+Complete local operation: This entire system operates without any internet connection or cloud services. All AI processing happens locally through Ollama, speech recognition through local Whisper or Windows native APIs, ensuring complete privacy and independence from external services.
+Security: Be cautious when writing code that can execute arbitrary commands on your device. Ensure your assistant only recognizes and executes a predefined set of safe commands to prevent malicious use.
+Alternative tools: For a more beginner-friendly approach that still involves some coding, you could explore Python-based assistants. Pre-existing projects on GitHub use libraries like SpeechRecognition, pyttsx3, and local Ollama models (completely avoiding any cloud APIs), which you can modify for device control.
+AI can make mistakes, so double-check responses
+
+
+
+
+Provide a C# example of how to use System.Diagnostics.Process to control a Windows application based on interpreted intent from the AI model
+
+What are the security implications of building an AI assistant with device control?
+
+How can I create custom voice commands beyond predefined ones?
+
+undefined
+undefined
+undefined
+21 sites
+Overview for AI Dev Gallery app | Microsoft Learn
+May 18, 2025 — In this article. AI Dev Gallery is an open-source app for Windows developers aiming to integrate AI capabilities into ...
+favicon
+Microsoft Learn
+
+Creating a Voice Virtual Assistant in Python (OpenAI ... - Reddit
+Dec 17, 2023 — Creating a Voice Virtual Assistant in Python (OpenAI, ElevenLabs, Deepgram) Intermediate Showcase. Hey guys! I spent t...
+favicon
+Reddit
+AI Dev Gallery (Preview) - Free download and install on ...
+Oct 10, 2025 — Screenshots. Description. Learn how to add AI with local models and APIs to Windows apps. Discover AI scenarios and mo...
+favicon
+Microsoft
+
+Show all
+That seems pretty straightforward but I couldn't use Python code instead of C++
+That's an important clarification. The AI Dev Gallery is focused on providing samples and source code in C# for Windows developers, especially those using the WinUI and Windows App SDK. However, you can absolutely use Python to build a similar AI assistant for Windows by combining different tools and libraries.
+Here is a breakdown of how to build your voice-controlled assistant using Python, achieving the same outcome as the C# method described previously.
+Step 1: Install Python and necessary libraries
+First, set up your development environment.
+Install Python from the official website. Ensure it is added to your system's PATH.
+Create a virtual environment to manage project dependencies:
+sh
+python -m venv venv
+venv\Scripts\activate
+Use code with caution.
+
+Install the required libraries using pip:
+sh
+pip install speechrecognition pyttsx3 wikipedia pyautogui
+Use code with caution.
+
+speechrecognition: Captures audio from the microphone and converts it to text.
+pyttsx3: A text-to-speech library that can use the voices already installed on your system.
+wikipedia: Simplifies searching the Wikipedia knowledge base.
+pyautogui: Provides functions for controlling the mouse and keyboard to automate GUI tasks.
+Step 2: Implement voice capabilities
+Create the functions to handle speech-to-text (STT) and text-to-speech (TTS).
+Text-to-speech (TTS):
+python
+import pyttsx3
+
+def speak(text):
+    engine = pyttsx3.init()
+    engine.say(text)
+    engine.runAndWait()
+Use code with caution.
+
+Speech-to-text (STT):
+python
+import speech_recognition as sr
+
+def get_command():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Listening...")
+        r.pause_threshold = 1
+        audio = r.listen(source)
+
+    try:
+        print("Recognizing...")
+        query = r.recognize_google(audio, language='en-us')
+        print(f"User said: {query}\n")
+        return query.lower()
+    except Exception as e:
+        print("Sorry, I didn't catch that. Please try again.")
+        return "None"
+Use code with caution.
+
+Integrate an AI model: The AI Dev Gallery uses local models, but with Python, you can either integrate a local model or a cloud-based API.
+Local AI (e.g., using Hugging Face): Use the transformers library to run a small-scale language model locally for offline processing.
+Cloud API (e.g., OpenAI): A simpler approach is to use the official OpenAI SDK for Python.
+sh
+pip install openai
+Use code with caution.
+
+python
+import openai
+openai.api_key = "YOUR_API_KEY"
+
+def chat_with_ai(prompt):
+    response = openai.Completion.create(
+        engine="davinci",  # or another model
+        prompt=prompt,
+        max_tokens=50
+    )
+    return response.choices[0].text
+Use code with caution.
+
+
+Step 3: Implement device control
+This is the core of your assistant's functionality. You can use Python's subprocess module to run system commands, and pyautogui for GUI automation.
+python
+import subprocess
+import pyautogui
+
+def execute_command(command):
+    if "open" in command and "notepad" in command:
+        speak("Opening Notepad.")
+        subprocess.Popen(["notepad.exe"])
+    elif "search" in command and "wikipedia" in command:
+        # Example using the wikipedia library
+        search_query = command.replace("search wikipedia for", "").strip()
+        speak(f"Searching Wikipedia for {search_query}.")
+        try:
+            result = wikipedia.summary(search_query, sentences=2)
+            speak(result)
+        except wikipedia.exceptions.PageError:
+            speak("Sorry, I couldn't find anything on that.")
+    elif "press" in command and "enter" in command:
+        speak("Pressing the enter key.")
+        pyautogui.press('enter')
+    else:
+        speak("Sorry, I don't know how to do that yet.")
+Use code with caution.
+
+Step 4: Combine everything into a main loop
+Finally, create the main loop that listens for a wake word, processes the command, and executes the action.
+python
+import time
+
+def main_assistant_loop():
+    while True:
+        # Listen for a wake word like "assistant"
+        command = get_command()
+        if "assistant" in command:
+            speak("Yes, how can I help you?")
+            action_command = get_command()
+            execute_command(action_command)
+        # Optional: Add a way to exit the loop
+        if "stop" in command:
+            speak("Goodbye!")
+            break
+
+# Start the assistant
+if __name__ == "__main__":
+    main_assistant_loop()
+Use code with caution.
+
+The best of both worlds
+For advanced use cases, you can actually use both C# and Python together. For example, you could write a fast, performant Windows application in C# that handles the UI and voice input using built-in Windows APIs. This C# application could then communicate with a separate Python backend (via a local server or named pipes) that uses Python's more extensive AI and machine learning libraries to process the complex natural language commands before sending the system actions back to the C# application.
+
+
+
+Using Python with native Windows libraries is the simplest and most direct approach, rather than using either PowerShell or the Windows Subsystem for Linux (WSL).
+Python (recommended): Libraries like pyttsx3, speechrecognition, and pyautogui give you direct, high-level control over Windows functionality from a Python script. There are no compatibility layers or extra configurations needed for things like accessing audio or controlling the user interface.
+WSL (complex): Building a voice assistant within WSL is not a good fit for controlling the Windows desktop. While modern WSL (WSLg) supports GUI apps, integrating a voice assistant would require a complex setup to get audio input and output working, along with additional configuration to send commands from the Linux environment to the Windows host.
+PowerShell (limiting): PowerShell can access .NET libraries for text-to-speech, and it can execute system commands. However, it is not designed for the same kind of rapid prototyping and extensive library ecosystem that Python offers for AI applications. Handling speech-to-text directly in PowerShell is more complex than using a Python library.
+Here is a comparison of the three options for building a custom voice-controlled assistant.
+Feature 	Python	PowerShell	WSL
+Simplicity	Best: High-level, dedicated libraries for every step (TTS, STT, GUI control). No complex setup required.	Moderate: Can be verbose and less streamlined for AI and voice tasks compared to Python.	Poor: Requires significant manual setup to enable audio support and communication with the Windows desktop.
+Device Control	Excellent: Libraries like pyautogui and subprocess allow for easy control of the Windows GUI and command-line programs.	Excellent: Has native access to Windows APIs and can easily run Windows commands and programs.	Poor: Requires passing commands from the Linux environment to the Windows host, adding a layer of complexity for controlling the native Windows desktop.
+Voice Support	Excellent: High-level libraries like speechrecognition and pyttsx3 handle audio input and output with minimal code.	Good: Can access the System.Speech .NET assembly for basic text-to-speech but lacks the robust, high-level speech-to-text libraries available in Python.	Poor: Audio forwarding from the Linux environment to Windows is complicated and unreliable.
+AI Integration	Excellent: The entire AI ecosystem, including PyTorch, TensorFlow, and libraries for accessing OpenAI or local models, is Python-native.	Limited: Integrating with AI libraries and services is generally much easier with Python. PowerShell has some AI functionality through modules like AI Shell but is not as comprehensive.	Good: Can run Linux-based AI applications, but complex setup is required to interface with Windows voice and control functions.
