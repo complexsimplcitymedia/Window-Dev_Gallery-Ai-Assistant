@@ -58,7 +58,7 @@ python ~/Window-Dev_Gallery-Ai-Assistant/docker/whisper/whisper_server.py
 You should see:
 ```
 INFO:     Started server process
-INFO:     Uvicorn running on http://0.0.0.0:8000
+INFO:     Uvicorn running on http://0.0.0.0:5000
 ```
 
 ### Step 4: Test from Windows PowerShell
@@ -69,7 +69,7 @@ $wslIP = wsl -- hostname -I | %{$_.split()[0]}
 echo $wslIP
 
 # Test health endpoint
-curl.exe "http://$wslIP:8000/health"
+curl.exe "http://$wslIP:5000/health"
 ```
 
 Should return:
@@ -92,7 +92,7 @@ Create `.env` file in WSL project root:
 export WHISPER_MODEL=base        # tiny, base, small, medium, large
 export WHISPER_DEVICE=cpu        # cpu, cuda, rocm (AMD GPU)
 export WHISPER_LANGUAGE=en       # Language code
-export WHISPER_PORT=8000         # Listen port
+export WHISPER_PORT=5000         # Listen port
 ```
 
 ### Enable GPU Acceleration (AMD)
@@ -166,7 +166,7 @@ To expose Whisper via reverse proxy (e.g., `whisper.yourdomain.com`):
 
 ```
 whisper.yourdomain.com {
-    reverse_proxy localhost:8000 {
+    reverse_proxy localhost:5000 {
         header_up X-Real-IP {http.request.remote.host}
         header_up X-Forwarded-For {http.request.remote.host}
         header_up X-Forwarded-Proto https
@@ -186,14 +186,14 @@ WHISPER_SERVER_URL=https://whisper.yourdomain.com
 ### Health Check
 
 ```bash
-curl http://localhost:8000/health
+curl http://localhost:5000/health
 ```
 
 ### Transcribe Audio
 
 ```bash
 # Transcribe audio file
-curl -X POST -F "file=@audio.wav" http://localhost:8000/transcribe
+curl -X POST -F "file=@audio.wav" http://localhost:5000/transcribe
 ```
 
 Response:
@@ -236,11 +236,11 @@ python -c "import torch; print(torch.cuda.is_available())"  # NVIDIA
 python -c "import torch; print(torch.version.hip)"           # AMD ROCm
 ```
 
-### Port 8000 Already in Use
+### Port 5000 Already in Use
 
 ```bash
 # Find process using port
-lsof -i :8000
+lsof -i :5000
 
 # Kill it or use different port
 export WHISPER_PORT=8001
@@ -255,7 +255,7 @@ wsl -l -v  # List WSL instances
 wsl -e ip addr  # Get WSL IP
 ```
 
-Try `127.0.0.1:8000` first (localhost forwarding works in recent WSL versions).
+Try `127.0.0.1:5000` first (localhost forwarding works in recent WSL versions).
 
 ## Performance Tips
 
@@ -274,7 +274,7 @@ Try `127.0.0.1:8000` first (localhost forwarding works in recent WSL versions).
 - Configure Windows AI Assistant to use Whisper server:
   ```env
   USE_WHISPER=true
-  WHISPER_SERVER_URL=http://localhost:8000  # or your reverse proxy URL
+  WHISPER_SERVER_URL=http://localhost:5000  # or your reverse proxy URL
   ```
 
 - Set up Caddy reverse proxy for secure external access
