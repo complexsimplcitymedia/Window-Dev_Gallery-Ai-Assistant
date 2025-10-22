@@ -10,6 +10,7 @@ import logging
 import asyncio
 from pathlib import Path
 from typing import Optional
+from contextlib import asynccontextmanager
 import whisper
 import torch
 from fastapi import FastAPI, File, UploadFile, HTTPException
@@ -25,25 +26,35 @@ class WhisperServer:
     def __init__(self):
         self.model = None
         self.model_name = os.getenv("WHISPER_MODEL", "base")
-        self.device = os.getenv("WHISPER_DEVICE", "cpu")
+        # Use CUDA (ROCm) if available, fallback to CPU
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.language = os.getenv("WHISPER_LANGUAGE", "en")
         
-        # Initialize FastAPI app
+        logger.info(f"Initializing Whisper Server with device: {self.device}")
+        if self.device == "cuda":
+            logger.info(f"GPU detected: {torch.cuda.get_device_name(0)}")
+        
+        # Initialize FastAPI app with lifespan
         self.app = FastAPI(
-            title="Local Whisper Server",
-            description="Speech-to-text API using OpenAI Whisper",
-            version="1.0.0"
+            title="Windows AI Whisper Server",
+            description="Speech-to-text API using OpenAI Whisper with GPU acceleration",
+            version="1.0.0",
+            lifespan=self.lifespan
         )
         
         # Setup routes
         self.setup_routes()
+    
+    @asynccontextmanager
+    async def lifespan(self, app: FastAPI):
+        # Startup
+        await self.load_model()
+        yield
+        # Shutdown (cleanup if needed)
+        pass
         
     def setup_routes(self):
         """Setup FastAPI routes"""
-        
-        @self.app.on_event("startup")
-        async def startup_event():
-            await self.load_model()
         
         @self.app.get("/health")
         async def health_check():
@@ -154,7 +165,7 @@ class WhisperServer:
             logger.error(f"Transcription error: {e}")
             raise
     
-    def run(self, host: str = "0.0.0.0", port: int = 8000):
+    def run(self, host: str = "100.110.82.181", port: int = 8001):
         """Run the Whisper server"""
         uvicorn.run(
             self.app,
