@@ -1,33 +1,33 @@
-aiohttp==3.9.1
-asyncio-mqtt==0.16.1
-numpy==1.24.3
-torch==2.1.0
-torchaudio==2.1.0
-whisper==1.1.10
-pyttsx3==2.90
-SpeechRecognition==3.10.0
-pyaudio==0.2.11
-requests==2.31.0
-python-dotenv==1.0.0
-pydantic==2.5.0
-pydantic-settings==2.1.0
-pywin32==306
-psutil==5.9.6
-keyboard==0.13.5
-mouse==0.7.1
-Pillow==10.1.0
-opencv-python==4.8.1.78
-screeninfo==0.8.1
+aiohttp
+asyncio-mqtt
+numpy
+torch
+torchaudio
+whisper
+pyttsx3
+SpeechRecognition
+pyaudio
+requests
+python-dotenv
+pydantic
+pydantic-settings
+pywin32
+psutil
+keyboard
+mouse
+Pillow
+opencv-python
+screeninfo
 
 # mem0 Persistent Memory & SSE Streaming
-aiohttp-sse-client==0.2.1
-mem0ai==0.1.5
+aiohttp-sse-client
+mem0ai
 
-# DirectML support for Windows
-onnxruntime-directml==1.16.3
-onnx==1.15.0
+# ROCm Windows preview PyTorch (installs via conda, not pip)
+# Install torch from conda: conda install pytorch::pytorch torchvision torchaudio -c pytorch
+# Or use: pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.4
 
 # Local development
-black==23.11.0
-pytest==7.4.3
-pytest-asyncio==0.21.1
+black
+pytest
+pytest-asyncio
