@@ -154,7 +154,7 @@ class WhisperServer:
             logger.error(f"Transcription error: {e}")
             raise
     
-    def run(self, host: str = "0.0.0.0", port: int = 8000):
+    def run(self, host: str = "0.0.0.0", port: int = 5000):
         """Run the Whisper server"""
         uvicorn.run(
             self.app,
